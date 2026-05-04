@@ -1,0 +1,143 @@
+/* =========================================
+   ESTILOS DE PLANES DE PRECIOS - Pro-Ciegos A.C.
+   ========================================= */
+
+:root {
+    --dark-blue: #001F3F;
+    --gold-main: #D4AF37;
+    --gold-bright: #FFD700;
+    --white: #FFFFFF;
+    --card-bg: rgba(255, 255, 255, 0.05);
+}
+
+.pricing-section {
+    padding: 100px 20px;
+    background: radial-gradient(circle at top, #001a35 0%, #000814 100%);
+    text-align: center;
+    color: white;
+}
+
+.pricing-header {
+    margin-bottom: 60px;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Tarjetas de Precio */
+.price-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 50px 30px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform-style: preserve-3d;
+}
+
+.price-card:hover {
+    border-color: var(--gold-main);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+/* Badge de Descuento */
+.discount-badge {
+    position: absolute;
+    top: 20px;
+    right: -35px;
+    background: var(--gold-main);
+    color: #000;
+    padding: 8px 40px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    transform: rotate(45deg);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+.price-card.featured {
+    background: rgba(212, 175, 55, 0.08);
+    border: 2px solid var(--gold-main);
+    transform: scale(1.05);
+    z-index: 2;
+}
+
+.price-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: var(--white);
+}
+
+.price-tag {
+    margin: 25px 0;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1.2rem;
+    display: block;
+}
+
+.current-price {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--gold-main);
+}
+
+.current-price span {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Lista de Beneficios */
+.price-features {
+    list-style: none;
+    margin: 30px 0;
+    text-align: left;
+    flex-grow: 1;
+}
+
+.price-features li {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+}
+
+.price-features li i {
+    color: var(--gold-main);
+    margin-right: 12px;
+}
+
+/* Botón de compra */
+.btn-price {
+    background: transparent;
+    border: 2px solid var(--gold-main);
+    color: var(--gold-main);
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.featured .btn-price, .btn-price:hover {
+    background: var(--gold-main);
+    color: #000;
+}
+
+@media (max-width: 768px) {
+    .price-card.featured { transform: scale(1); }
+}

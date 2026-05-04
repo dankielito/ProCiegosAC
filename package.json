@@ -17,6 +17,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "fast-levenshtein": "^3.0.0",
     "google-translate-api-x": "^10.7.2",
     "multer": "^2.1.1",
     "mysql2": "^3.22.3",

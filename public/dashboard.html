@@ -4,278 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Pro-Ciegos A.C.</title>
-    <!-- Font Awesome para los candados y checks -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Fonts para elegancia -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <!-- SweetAlert2 para alertas pro -->
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <style>
-        :root {
-            --azul-deep: #001F3F;
-            --azul-medium: #003366;
-            --oro: #D4AF37;
-            --oro-brillante: #FFD700;
-            --blanco: #FFFFFF;
-            --gris-bloqueo: #2d3436;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #000c18 0%, #001F3F 100%);
-            color: var(--blanco);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* --- HEADER PROFESIONAL --- */
-        header {
-            background: rgba(0, 31, 63, 0.9);
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid var(--oro);
-            padding: 10px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            box-sizing: border-box;
-        }
-
-        .logo-area { display: flex; align-items: center; gap: 15px; }
-        .logo-area img { height: 50px; }
-        .logo-area h1 { font-size: 1.2rem; color: var(--oro); margin: 0; letter-spacing: 1px; }
-
-        .user-stats {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: bold;
-            background: rgba(212, 175, 55, 0.1);
-            padding: 5px 15px;
-            border-radius: 20px;
-            border: 1px solid var(--oro);
-        }
-
-        .stat-item i { color: var(--oro); }
-
-        .nav-menu { display: flex; gap: 20px; }
-        .nav-btn {
-            color: var(--blanco);
-            text-decoration: none;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            transition: color 0.3s;
-        }
-        .nav-btn:hover { color: var(--oro); }
-
-        /* --- LAYOUT PRINCIPAL --- */
-        .main-container {
-            margin-top: 100px;
-            padding-left: 10%; /* Posiciona el camino a la izquierda */
-            display: flex;
-            gap: 50px;
-        }
-
-        /* --- CAMINO DE NIVELES (TIPO DUOLINGO) --- */
-        .learning-path {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-            width: 200px; /* Tamaño mediano */
-        }
-
-        .level-btn {
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            text-decoration: none;
-            border: none;
-        }
-
-        /* Zig Zag Mediano */
-        .level-btn:nth-child(even) { transform: translateX(40px); }
-
-        /* Estados de los botones */
-        .level-btn.locked {
-            background: var(--gris-bloqueo);
-            color: #636e72;
-            cursor: not-allowed;
-            box-shadow: 0 6px 0 #1a1a1a;
-        }
-
-        .level-btn.current {
-            background: var(--oro);
-            color: var(--azul-deep);
-            box-shadow: 0 8px 0 #967d27, 0 0 20px rgba(212, 175, 55, 0.5);
-            animation: pulse-gold 2s infinite;
-        }
-
-        .level-btn.completed {
-            background: var(--azul-medium);
-            color: var(--oro);
-            border: 3px solid var(--oro);
-            box-shadow: 0 6px 0 #002244;
-        }
-
-        .level-btn:active { transform: scale(0.95) translateY(4px); box-shadow: 0 2px 0 inherit; }
-
-        @keyframes pulse-gold {
-            0% { transform: scale(1) translateX(var(--tx, 0)); }
-            50% { transform: scale(1.1) translateX(var(--tx, 0)); }
-            100% { transform: scale(1) translateX(var(--tx, 0)); }
-        }
-        
-        .level-btn:nth-child(even).current { --tx: 40px; }
-
-        /* --- MAPACHE GUÍA --- */
-        .guide-container {
-            position: fixed;
-            bottom: 30px;
-            right: 50px;
-            text-align: center;
-        }
-        .guide-container img {
-            width: 150px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
-            animation: float 4s ease-in-out infinite;
-        }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-    </style>
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
 
-    <header>
-        <div class="logo-area">
-            <img src="img/logo.png" alt="Pro-Ciegos Logo">
-            <h1>PRO-CIEGOS A.C.</h1>
+    <!-- SIDEBAR FIJA -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="img/logo.png" alt="Logo">
+            <h2>PRO-CIEGOS</h2>
         </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active"><i class="fas fa-home"></i> Aprender</a>
+            <a href="#" class="nav-item"><i class="fas fa-book"></i> Diccionario</a>
+            <a href="#" class="nav-item"><i class="fas fa-trophy"></i> Clasificación</a>
+            <a href="#" class="nav-item"><i class="fas fa-store"></i> Tienda</a>
+            <a href="#" class="nav-item"><i class="fas fa-user-circle"></i> Perfil</a>
+        </nav>
+    </aside>
 
-        <div class="user-stats">
-            <div class="stat-item">
-                <i class="fas fa-fire"></i>
-                <span id="xp-count">0</span> XP
+    <!-- CONTENEDOR PRINCIPAL DIVIDIDO -->
+    <div class="main-wrapper">
+        
+        <!-- HEADER DE ESTADÍSTICAS -->
+        <header class="top-bar">
+            <div class="stats-container">
+                <div class="stat-bubble xp"><i class="fas fa-fire"></i> <span id="xp-count">0</span></div>
+                <div class="stat-bubble gems"><i class="fas fa-gem"></i> <span id="gem-count">0</span></div>
+                <div class="stat-bubble streak"><i class="fas fa-bolt"></i> <span>5 días</span></div>
             </div>
-            <div class="stat-item">
-                <i class="fas fa-gem"></i>
-                <span id="gem-count">0</span>
-            </div>
-            <nav class="nav-menu">
-                <a href="#" class="nav-btn"><i class="fas fa-user-circle"></i> Cuenta</a>
-                <a href="/logout" class="nav-btn"><i class="fas fa-sign-out-alt"></i> Salir</a>
-            </nav>
-        </div>
-    </header>
+        </header>
 
-    <div class="main-container">
-        <!-- Camino de Aprendizaje -->
-        <div class="learning-path" id="mapa-niveles">
-            <!-- Generamos 10 niveles de ejemplo -->
-            <button class="level-btn" data-level="1"></button>
-            <button class="level-btn" data-level="2"></button>
-            <button class="level-btn" data-level="3"></button>
-            <button class="level-btn" data-level="4"></button>
-            <button class="level-btn" data-level="5"></button>
-            <button class="level-btn" data-level="6"></button>
-            <button class="level-btn" data-level="7"></button>
-            <button class="level-btn" data-level="8"></button>
-            <button class="level-btn" data-level="9"></button>
-            <button class="level-btn" data-level="10"></button>
-        </div>
+        <main class="split-content">
+            <!-- COLUMNA IZQUIERDA: MAPA DE NIVELES (20 niveles en total) -->
+            <section class="levels-column" id="levels-container">
+                <!-- Se genera dinámicamente con JS -->
+            </section>
 
-        <!-- Aquí podrías poner contenido lateral como noticias o info de cuenta -->
-    </div>
-
-    <div class="guide-container">
-        <img src="img/raccoon_guide.png" alt="Guía">
-        <p style="color: var(--oro); font-weight: bold; margin-top: 10px;">¡Sigue así, campeón!</p>
+            <!-- COLUMNA DERECHA: GUÍA (Fija) -->
+            <section class="guide-column">
+                <div class="guide-content">
+                    <img src="img/mapache.png" alt="Mapache" class="raccoon-hero">
+                    <div class="speech-bubble-pro">
+                        <h3>¡Sigue adelante!</h3>
+                        <p>Has llegado muy lejos. Completa los niveles para dominar todos los biomas.</p>
+                        <div class="mini-progress">
+                            <span>Progreso Total</span>
+                            <div class="bar-bg"><div class="bar-fill" id="total-progress-bar"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 
     <script>
-        // --- SISTEMA DE BLOQUEO INTEGRADO Y CORREGIDO ---
+        // Simulación de progreso (Nivel actual en el que se encuentra el usuario)
         let nivelProgreso = parseInt(localStorage.getItem('nivelProgreso')) || 1;
-        let xpActual = parseInt(localStorage.getItem('xpTotal')) || 0;
-        let gemasActual = parseInt(localStorage.getItem('gemasTotal')) || 0;
 
-        function verificarNiveles() {
-            const botones = document.querySelectorAll('.level-btn');
-            
-            // Actualizar HUD visualmente
-            document.getElementById('xp-count').innerText = xpActual;
-            document.getElementById('gem-count').innerText = gemasActual;
+        function renderizarMapa() {
+            const container = document.getElementById('levels-container');
+            // Definición de los 4 biomas (5 niveles cada uno)
+            const biomas = [
+                { id: 'beach', clase: 'bg-beach', inicio: 1, fin: 5 },
+                { id: 'jungle', clase: 'bg-jungle', inicio: 6, fin: 10 },
+                { id: 'lava', clase: 'bg-lava', inicio: 11, fin: 15 },
+                { id: 'snow', clase: 'bg-snow', inicio: 16, fin: 20 }
+            ];
 
-            botones.forEach(boton => {
-                const nivelBoton = parseInt(boton.getAttribute('data-level'));
+            biomas.forEach((bioma, index) => {
+                const section = document.createElement('div');
+                section.className = `bioma-wrapper ${bioma.clase}`;
                 
-                // Limpiar clases previas
-                boton.classList.remove('completed', 'current', 'locked');
-                boton.onclick = null; // Resetear eventos
+                for (let i = bioma.inicio; i <= bioma.fin; i++) {
+                    const btn = document.createElement('button');
+                    btn.className = 'level-btn';
+                    
+                    if (i < nivelProgreso) {
+                        btn.classList.add('completed');
+                        btn.innerHTML = '<i class="fas fa-check"></i>';
+                    } else if (i === nivelProgreso) {
+                        btn.classList.add('current');
+                        btn.innerHTML = '<i class="fas fa-star"></i>';
+                    } else {
+                        btn.classList.add('locked');
+                        btn.innerHTML = '<i class="fas fa-lock"></i>';
+                    }
 
-                if (nivelBoton < nivelProgreso) {
-                    // NIVEL COMPLETADO
-                    boton.classList.add('completed');
-                    boton.innerHTML = '<i class="fas fa-check"></i>';
-                    boton.onclick = () => window.location.href = `nivel.html?n=${nivelBoton}`;
-                } 
-                else if (nivelBoton === nivelProgreso) {
-                    // NIVEL ACTUAL (EL QUE DEBE JUGAR)
-                    boton.classList.add('current');
-                    boton.innerHTML = nivelBoton;
-                    boton.onclick = () => window.location.href = `nivel.html?n=${nivelBoton}`;
-                } 
-                else {
-                    // NIVEL BLOQUEADO
-                    boton.classList.add('locked');
-                    boton.innerHTML = '<i class="fas fa-lock"></i>';
-                    boton.onclick = (e) => {
-                        e.preventDefault();
-                        Swal.fire({
-                            icon: 'error',
-                            title: '¡Nivel bloqueado!',
-                            text: 'Debes completar los desafíos anteriores para desbloquear el nivel ' + nivelBoton + '.',
-                            background: '#001F3F',
-                            color: '#fff',
-                            confirmButtonColor: '#D4AF37'
-                        });
+                    btn.onclick = () => {
+                        if (i <= nivelProgreso) {
+                            window.location.href = `nivel.html?n=${i}`;
+                        } else {
+                            Swal.fire({ 
+                                title: 'Nivel bloqueado', 
+                                text: 'Completa los niveles anteriores para desbloquear este bioma.',
+                                icon: 'lock', 
+                                confirmButtonColor: '#D4AF37' 
+                            });
+                        }
                     };
+                    section.appendChild(btn);
+                }
+                
+                container.appendChild(section);
+
+                // Agregar línea dorada entre biomas (excepto después del último)
+                if (index < biomas.length - 1) {
+                    const divider = document.createElement('div');
+                    divider.className = 'gold-separator';
+                    container.appendChild(divider);
                 }
             });
+
+            // Actualizar barra de progreso visual (0 a 100%)
+            const percent = (nivelProgreso / 20) * 100;
+            document.getElementById('total-progress-bar').style.width = `${percent}%`;
         }
 
-        // Simulación: Llamar a esta función cuando gane un nivel
-        function finalizarNivel(xpGanada, gemasGanadas) {
-            nivelProgreso++;
-            xpActual += xpGanada;
-            gemasActual += gemasGanadas;
-
-            localStorage.setItem('nivelProgreso', nivelProgreso);
-            localStorage.setItem('xpTotal', xpActual);
-            localStorage.setItem('gemasTotal', gemasActual);
-            verificarNiveles();
-        }
-
-        // Iniciar al cargar
-        window.onload = verificarNiveles;
+        window.onload = renderizarMapa;
     </script>
 </body>
 </html>

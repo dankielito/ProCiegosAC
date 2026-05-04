@@ -17,28 +17,37 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Configuración de almacenamiento para audios
+if (!fs.existsSync('Sonidos/')) {
+    fs.mkdirSync('Sonidos/');
+}
 const upload = multer({ dest: 'Sonidos/' });
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public')); // Aquí es donde lee tus .html
+app.use(express.static('public')); // Carpeta para tus .html, .css y .js
+
+// Configuración de Sesiones
 app.use(session({
     secret: 'pro-ciegos-aesthetic-key-2026',
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } 
+    saveUninitialized: false,
+    cookie: { 
+        secure: false, // Cambiar a true si usas HTTPS
+        maxAge: 1000 * 60 * 60 * 24 // 24 horas
+    } 
 }));
 
 // --- CONFIGURACIÓN DE BASE DE DATOS (SQLite) ---
 let db;
 (async () => {
     db = await open({
-        filename: './usuarios.db', // Se crea automáticamente en la raíz
+        filename: './prociegos.db', // Nombre actualizado a tu solicitud
         driver: sqlite3.Database
     });
 
+    // Aseguramos que la tabla exista (por si borras el archivo .db por accidente)
     await db.exec(`
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +56,7 @@ let db;
         )
     `);
 
-    // Usuario inicial (User: admin / Pass: 1234)
+    // Usuario inicial de prueba
     const user = await db.get('SELECT * FROM users WHERE username = ?', ['admin']);
     if (!user) {
         const hash = await bcrypt.hash('1234', 10);
@@ -60,7 +69,7 @@ let db;
 const modelPath = path.join(__dirname, 'model');
 let model;
 if (!fs.existsSync(modelPath)) {
-    console.error("❌ Error: No se encuentra la carpeta 'model'.");
+    console.error("❌ Error: No se encuentra la carpeta 'model'. Descárgala de la web de Vosk.");
 } else {
     model = new Model(modelPath);
     console.log("✅ Modelo Vosk cargado correctamente.");
@@ -86,9 +95,11 @@ app.post('/login', async (req, res) => {
     try {
         const user = await db.get('SELECT * FROM users WHERE username = ?', [username]);
         if (user && await bcrypt.compare(password, user.password)) {
+            // Guardamos datos en la sesión del servidor
             req.session.userId = user.id;
             req.session.username = user.username;
-            res.json({ success: true });
+            
+            res.json({ success: true, username: user.username });
         } else {
             res.status(401).json({ success: false, message: 'Credenciales incorrectas' });
         }
@@ -97,6 +108,16 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Ruta para obtener los datos del usuario actual (Sidebar)
+app.get('/api/user-data', (req, res) => {
+    if (req.session.username) {
+        res.json({ loggedIn: true, username: req.session.username });
+    } else {
+        res.json({ loggedIn: false });
+    }
+});
+
+// Cerrar sesión
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/login.html');
@@ -108,7 +129,7 @@ const authRequired = (req, res, next) => {
     next();
 };
 
-// --- RUTAS DE LA APLICACIÓN (PRO-CIEGOS A.C.) ---
+// --- RUTAS DE EVALUACIÓN DE VOZ ---
 
 app.post('/evaluate-audio', authRequired, upload.single('audio'), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No se recibió audio" });
@@ -129,11 +150,11 @@ app.post('/evaluate-audio', authRequired, upload.single('audio'), async (req, re
                 const result = rec.finalResult();
                 const spokenText = result.text.toLowerCase().trim();
 
-                // Lógica de Precisión
+                // Lógica de Precisión (Levenshtein)
                 let score = 0;
                 if (spokenText === targetText && targetText !== "") {
                     score = 100;
-                } else if (spokenText !== "") {
+                } else if (spokenText !== "" && targetText !== "") {
                     const distance = levenshtein.get(targetText, spokenText);
                     const longestLength = Math.max(targetText.length, spokenText.length);
                     score = Math.round(((longestLength - distance) / longestLength) * 100);
@@ -172,9 +193,9 @@ app.post('/evaluate-audio', authRequired, upload.single('audio'), async (req, re
 app.listen(PORT, () => {
     console.log(`
     --------------------------------------------------
-    🚀 Servidor Pro-Ciegos A.C. en puerto ${PORT}
-    🎨 Estética: Azul Oscuro y Dorado
-    📂 DB SQLite: Activa (usuarios.db)
+    🚀 Servidor Pro-Ciegos A.C. iniciado
+    📂 Puerto: ${PORT}
+    📂 DB SQLite: Activa (prociegos.db)
     🔗 URL: http://localhost:${PORT}/login.html
     --------------------------------------------------
     `);

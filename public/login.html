@@ -37,31 +37,49 @@
     </div>
 
     <script>
-        document.getElementById('lForm').onsubmit = (e) => {
+        document.getElementById('lForm').onsubmit = async (e) => {
             e.preventDefault();
-            const userInput = document.getElementById('u').value;
-            const passInput = document.getElementById('p').value;
+            const username = document.getElementById('u').value;
+            const password = document.getElementById('p').value;
 
-            Swal.fire({ title: 'Verificando...', didOpen: () => Swal.showLoading() });
+            Swal.fire({ 
+                title: 'Verificando...', 
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading() 
+            });
 
-            const usuarios = JSON.parse(localStorage.getItem('usuarios_prociegos')) || [];
-            const usuarioEncontrado = usuarios.find(u => u.username === userInput && u.password === passInput);
+            try {
+                // Enviamos las credenciales al endpoint /login de server.js
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
 
-            setTimeout(() => {
-                if(usuarioEncontrado) {
-                    // Guardamos el nombre en sessionStorage para que dashboard.php pueda saludarlo
-                    sessionStorage.setItem('usuario_nombre', userInput);
-                    // REDIRECCIÓN A PHP
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // El servidor ya creó la sesión (cookie), solo redirigimos
                     window.location.href = 'dashboard.html';
                 } else {
+                    // Si el servidor responde 401 o success: false
                     Swal.fire({ 
                         icon: 'error', 
                         title: 'Acceso Denegado', 
-                        text: 'Usuario o contraseña incorrectos', 
+                        text: data.message || 'Usuario o contraseña incorrectos', 
                         confirmButtonColor: '#001F3F' 
                     });
                 }
-            }, 1000);
+            } catch (error) {
+                console.error('Error en login:', error);
+                Swal.fire({ 
+                    icon: 'error', 
+                    title: 'Error de conexión', 
+                    text: 'No se pudo conectar con el servidor. Verifica que Node.js esté corriendo.' 
+                });
+            }
         };
     </script>
 </body>

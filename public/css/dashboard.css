@@ -1,9 +1,10 @@
 :root {
     --navy: #060d1a;
     --navy-header: #0a192f;
+    --deep-blue: #001f3f;
+    --royal-blue: #003366;
     --gold: #D4AF37;
     --gold-dark: #b08d2c;
-    --blue-ui: #003366;
     --white: #ffffff;
     --sidebar-w: 260px;
 }
@@ -17,58 +18,84 @@ body {
     overflow: hidden;
 }
 
-/* --- SIDEBAR UI (Blanco) --- */
-.modern-sidebar {
+/* --- SIDEBAR ELITE (Rectángulo Azul y Dorado) --- */
+.elite-sidebar {
     width: var(--sidebar-w);
-    background: var(--white);
-    margin: 15px;
-    border-radius: 30px;
+    background: linear-gradient(180deg, var(--deep-blue) 0%, var(--royal-blue) 100%);
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 30px 15px;
-    box-shadow: 10px 0 40px rgba(0,0,0,0.1);
+    border-right: 3px solid var(--gold);
+    box-shadow: 10px 0 30px rgba(0,0,0,0.5);
     z-index: 1000;
 }
 
-.user-profile-section {
-    display: flex; align-items: center; gap: 12px;
-    padding-bottom: 25px; border-bottom: 1px solid #f0f0f0; margin-bottom: 20px;
+.sidebar-brand {
+    padding: 40px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
 }
 
-.avatar-wrapper img { width: 50px; height: 50px; border-radius: 14px; border: 2px solid var(--gold); }
-.user-name { display: block; font-weight: 800; font-size: 0.95rem; color: var(--blue-ui); }
-.user-role { font-size: 0.75rem; color: #a0aec0; font-weight: 600; }
-
-.s-link {
-    text-decoration: none; display: flex; align-items: center; gap: 15px;
-    padding: 12px 15px; margin-bottom: 5px; border-radius: 16px; transition: 0.3s;
+.brand-accent {
+    position: absolute; left: 0; top: 40px;
+    width: 5px; height: 30px; background: var(--gold);
+    border-radius: 0 5px 5px 0;
+    box-shadow: 0 0 15px var(--gold);
 }
 
-.icon-shape {
-    width: 40px; height: 40px; background: #f7fafc;
+.gold-icon { color: var(--gold); font-size: 1.8rem; }
+.brand-name { color: var(--white); font-weight: 900; letter-spacing: 2px; font-size: 1.1rem; }
+
+.user-brief {
+    padding: 0 25px 30px;
+    display: flex; align-items: center; gap: 15px;
+}
+
+.avatar-frame { padding: 3px; border: 2px solid var(--gold); border-radius: 12px; }
+.avatar-frame img { width: 45px; height: 45px; border-radius: 8px; }
+.u-name { color: var(--white); font-weight: 700; margin: 0; font-size: 0.9rem; }
+.u-role { color: var(--gold); font-size: 0.75rem; margin: 0; font-weight: 600; opacity: 0.8; }
+
+.elite-nav { flex: 1; display: flex; flex-direction: column; }
+
+.nav-item {
+    text-decoration: none; display: flex; align-items: center; gap: 18px;
+    padding: 16px 25px; color: rgba(255,255,255,0.7);
+    font-weight: 600; position: relative; transition: 0.3s;
+}
+
+.nav-item i { font-size: 1.2rem; width: 25px; text-align: center; color: var(--gold); }
+
+.nav-item:hover, .nav-item.active {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--white);
+}
+
+.nav-item.active .active-indicator {
+    position: absolute; right: 0; top: 0; height: 100%;
+    width: 4px; background: var(--gold); box-shadow: -5px 0 15px var(--gold);
+}
+
+.sidebar-footer { padding: 30px 20px; }
+.logout-card-elite {
+    background: transparent; border: 2px solid var(--gold);
+    color: var(--gold); text-decoration: none;
     display: flex; align-items: center; justify-content: center;
-    border-radius: 12px; color: var(--gold); font-size: 1.2rem;
+    gap: 10px; padding: 14px; border-radius: 15px;
+    font-weight: 800; font-size: 0.8rem; transition: 0.3s;
 }
 
-.s-link span { font-size: 0.9rem; font-weight: 700; color: #718096; }
-.s-link.active { background: rgba(0, 51, 102, 0.05); }
-.s-link.active .icon-shape { background: var(--blue-ui); color: var(--gold); }
-.s-link.active span { color: var(--blue-ui); font-weight: 800; }
+.logout-card-elite:hover { background: var(--gold); color: var(--deep-blue); }
 
-.logout-card {
-    background: var(--gold); color: white; text-decoration: none;
-    display: flex; align-items: center; justify-content: center;
-    gap: 10px; padding: 15px; border-radius: 20px;
-    font-weight: 800; box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
-}
-
-/* --- HEADER (Acomodado) --- */
+/* --- HEADER (Como lo querías) --- */
 .main-viewport { flex: 1; display: flex; flex-direction: column; padding-top: 10px; overflow: hidden; }
 
 .top-nav {
     height: 85px;
     display: flex; justify-content: space-between; align-items: center;
-    padding: 0 35px; margin: 0 15px 15px 0;
+    padding: 0 35px; margin: 0 15px 15px 15px; /* Margen a la izquierda para no pegar al sidebar */
     background: var(--navy-header);
     border-radius: 25px; border-bottom: 3px solid var(--gold);
 }
@@ -85,7 +112,7 @@ body {
 }
 .header-stat i { color: var(--gold); }
 
-/* --- MAPA --- */
+/* --- MAPA Y SERPIENTE --- */
 .split-screen { display: flex; flex: 1; overflow: hidden; }
 
 .map-area {
@@ -97,7 +124,7 @@ body {
 
 .node-wrapper { width: 100%; display: flex; justify-content: center; }
 
-/* Serpiente */
+/* Animación de Serpiente contenida */
 .node-wrapper:nth-child(5n+1) { transform: translateX(-50px); }
 .node-wrapper:nth-child(5n+2) { transform: translateX(30px); }
 .node-wrapper:nth-child(5n+3) { transform: translateX(100px); }

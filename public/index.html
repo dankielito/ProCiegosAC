@@ -2,30 +2,143 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Pro-Ciegos A.C. | Asistente de Voz</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
-    <style>
-        body { background: #121212; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
-        .container { background: #1e1e1e; padding: 2rem; border-radius: 15px; width: 80%; }
-        #targetDisplay { font-size: 2.5rem; color: #4facfe; margin: 20px 0; }
-        .results { margin-top: 20px; border-top: 1px solid #333; padding-top: 20px; }
-        #textIngles { font-size: 1.5rem; color: #ffff00; }
-        #textEspanol { font-size: 1.2rem; color: #aaa; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro-Ciegos A.C. | Innovación Lingüística</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome (Iconos) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="landing">
 
-    <div class="container">
-        <h1>Asistente de Pronunciación</h1>
-        <h2 id="targetDisplay">Cargando...</h2>
+    <!-- Header con Logo Central Grande -->
+    <header class="main-header">
+        <div class="container header-grid">
+            <!-- Navegación Izquierda -->
+            <nav class="nav-left">
+                <a href="#nosotros"><i class="fa-solid fa-users-gear"></i> Nosotros</a>
+                <a href="#meta"><i class="fa-solid fa-bullseye"></i> Meta</a>
+            </nav>
 
-        <div class="results">
-            <p id="textIngles"></p>
-            <p id="textEspanol"></p>
+            <!-- Logo Central -->
+            <a href="/" class="logo-container-central">
+                <img src="img/logo.png" alt="Pro-Ciegos A.C. Logo" class="nav-logo-large">
+            </a>
+
+            <!-- Acciones Derecha -->
+            <div class="auth-btns">
+                <a href="login.html" class="btn-outline">Iniciar Sesión</a>
+                <a href="registro.html" class="btn-gold-small">Registrarse</a>
+            </div>
         </div>
-    </div>
+    </header>
 
-    <script type="module" src="script/detectarMicrofono.js"></script>
+    <!-- Hero Section -->
+    <section class="hero-landing">
+        <div class="hero-content" data-aos="zoom-in" data-aos-duration="1200">
+            <span class="badge">Proyecto Académico | UPIICSA</span>
+            <h1>Tecnología que rompe <br><span class="gold-text">Barreras de Lenguaje</span></h1>
+            <p>Sistema avanzado de reconocimiento de voz diseñado para empoderar el aprendizaje de inglés a través de la accesibilidad digital.</p>
+            <div class="hero-actions">
+                <a href="login.html" class="btn-gold-large" onclick="celebrate()">Empezar Ahora</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Nosotros -->
+    <section id="nosotros" class="info-section">
+        <div class="container">
+            <h2 data-aos="fade-up">Nuestra Identidad</h2>
+            <p data-aos="fade-up" data-aos-delay="200">Somos estudiantes de <strong>8vo Semestre</strong> comprometidos con la inclusión tecnológica.</p>
+            
+            <div class="swiper mySwiper" data-aos="fade-up" data-aos-delay="400">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="img/eduardo.png" alt="Eduardo">
+                        <div class="member-info">
+                            <h3>Eduardo</h3>
+                            <p><i class="fa-solid fa-code"></i> Ingeniería y Lógica</p>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="img/cass.png" alt="Cass">
+                        <div class="member-info">
+                            <h3>Cass</h3>
+                            <p><i class="fa-solid fa-pen-nib"></i> Diseño y Experiencia</p>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="img/dankiel.png" alt="Dankiel">
+                        <div class="member-info">
+                            <h3>Daniel</h3>
+                            <p><i class="fa-solid fa-microchip"></i> Arquitectura y Backend</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Meta -->
+    <section id="meta" class="info-section bg-dark">
+        <div class="container">
+            <!-- Cambio aplicado aquí para asegurar el color dorado -->
+            <h2 class="gold-text" style="color: #D4AF37;" data-aos="fade-down">Objetivos del Proyecto</h2>
+            <div class="meta-grid">
+                <div class="meta-item" data-aos="flip-left" data-aos-delay="100">
+                    <i class="fa-solid fa-eye-low-vision fa-3x gold-text"></i>
+                    <h3>Accesibilidad</h3>
+                    <p>Interfaces optimizadas para el uso de lectores de pantalla y comandos de voz.</p>
+                </div>
+                <div class="meta-item" data-aos="flip-left" data-aos-delay="300">
+                    <i class="fa-solid fa-wave-square fa-3x gold-text"></i>
+                    <h3>Análisis Fonético</h3>
+                    <p>Comparación en tiempo real de la pronunciación mediante modelos de IA.</p>
+                </div>
+                <div class="meta-item" data-aos="flip-left" data-aos-delay="500">
+                    <i class="fa-solid fa-graduation-cap fa-3x gold-text"></i>
+                    <h3>Impacto Social</h3>
+                    <p>Fomentar la educación bilingüe inclusiva en la comunidad de Pro-Ciegos A.C.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-simple">
+        <p>&copy; 2026 Pro-Ciegos A.C. | Desarrollado por el equipo de 8vo Semestre IPN-UPIICSA</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        AOS.init({ once: true });
+        var swiper = new Swiper(".mySwiper", {
+            effect: "cards",
+            grabCursor: true,
+            pagination: { el: ".swiper-pagination", clickable: true },
+        });
+        function celebrate() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#D4AF37', '#001F3F', '#FFFFFF']
+            });
+        }
+    </script>
 </body>
 </html>

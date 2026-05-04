@@ -1,0 +1,320 @@
+/* =========================================
+   VARIABLES Y CONFIGURACIÓN BASE
+   ========================================= */
+   :root {
+    --dark: #001F3F;
+    --dark-pro: #000c1a;
+    --gold: #D4AF37;
+    --gold-hover: #b8952d;
+    --white: #FFFFFF;
+    --gray: #F8F9FA;
+    --text-muted: #718096;
+    --shadow: 0 20px 40px rgba(0,0,0,0.3);
+    --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Inter', sans-serif; 
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--gray);
+    color: var(--dark);
+    line-height: 1.6;
+}
+
+body.auth-body {
+    background: radial-gradient(circle at center, #001a35 0%, #000814 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+body.landing {
+    background: var(--white);
+    overflow-x: hidden;
+}
+
+/* =========================================
+   HEADER Y LOGO CENTRAL (VERSION FINAL)
+   ========================================= */
+.main-header {
+    background: rgba(0, 31, 63, 0.95);
+    position: fixed;
+    top: 0; 
+    width: 100%;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    height: 100px; /* Altura aumentada para el logo grande */
+    display: flex;
+    align-items: center;
+}
+
+/* FRANJA DORADA CENTRAL PARA RESALTAR EL LOGO */
+.main-header::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px; /* Ancho de la franja */
+    height: 65px;  /* Grosor de la franja */
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.7;
+    border-radius: 50px;
+    filter: blur(10px); /* Efecto de resplandor suave */
+    z-index: 1;
+}
+
+.main-header .container {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 0 20px;
+    width: 100%;
+    position: relative;
+    z-index: 5;
+}
+
+/* Contenedor del Logo: Solo la imagen, sin texto */
+.logo-container-central {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    z-index: 10;
+}
+
+.nav-logo-large {
+    height: 110px; /* Tamaño grande forzado */
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+/* EFECTO HOVER ANIMADO */
+.logo-container-central:hover .nav-logo-large {
+    transform: scale(1.15) rotate(2deg); /* Pulso y rotación */
+    filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.7)) brightness(1.1);
+}
+
+/* Menús laterales */
+.nav-left, .auth-btns {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.auth-btns {
+    gap: 15px;
+}
+
+.gold-text { color: var(--gold); }
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+nav a i { margin-right: 8px; color: var(--gold); }
+nav a:hover { 
+    color: var(--gold); 
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   BOTONES
+   ========================================= */
+.btn-gold-small {
+    background: var(--gold);
+    color: var(--dark) !important;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: 800;
+}
+
+.btn-outline {
+    border: 1px solid var(--gold);
+    padding: 10px 22px;
+    border-radius: 8px;
+    color: var(--gold) !important;
+}
+
+.btn-gold-large {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--dark);
+    text-decoration: none;
+    padding: 18px 50px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    transition: var(--transition);
+    cursor: pointer;
+    border: none;
+}
+
+.btn-gold-large:hover {
+    background: var(--gold-hover);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(212, 175, 55, 0.4);
+}
+
+/* =========================================
+   HERO SECTION
+   ========================================= */
+.hero-landing {
+    padding: 240px 20px 100px; /* Espacio para el nuevo header alto */
+    text-align: center;
+    background: linear-gradient(rgba(0,31,63,0.85), rgba(0,31,63,0.95)), 
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.badge {
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--gold);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-bottom: 2rem;
+    display: inline-block;
+    border: 1px solid var(--gold);
+}
+
+.hero-landing h1 { 
+    font-size: 4rem; 
+    line-height: 1.1; 
+    margin-bottom: 25px; 
+    font-weight: 800;
+    text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.hero-landing p { 
+    font-size: 1.2rem; 
+    max-width: 800px; 
+    margin: 0 auto; 
+    opacity: 0.9; 
+}
+
+.hero-actions { 
+    display: flex; 
+    gap: 20px; 
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 3rem; 
+}
+
+/* =========================================
+   SECCIONES Y GRIDS
+   ========================================= */
+.info-section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
+.info-section h2 { font-size: 2.8rem; margin-bottom: 20px; color: var(--dark); font-weight: 800; }
+
+.bg-dark { background: var(--dark-pro); max-width: 100%; color: white; }
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.meta-item {
+    background: rgba(255,255,255,0.03);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    transition: var(--transition);
+}
+
+/* =========================================
+   SWIPER
+   ========================================= */
+.mySwiper { width: 300px; height: 450px; margin-top: 40px; }
+.swiper-slide { border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); position: relative; background: var(--dark); }
+.swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
+.member-info { position: absolute; bottom: 0; background: linear-gradient(transparent, rgba(0, 12, 26, 0.95)); width: 100%; padding: 30px 20px 20px; color: white; text-align: left; }
+
+/* =========================================
+   AUTH CARDS
+   ========================================= */
+.auth-card {
+    background: var(--white);
+    padding: 3rem;
+    border-radius: 30px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.logo {
+    width: 50px; height: 50px;
+    background: var(--gold);
+    color: var(--dark);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; margin: 0 auto 1.5rem;
+}
+
+.field { margin-bottom: 1.2rem; text-align: left; }
+label { display: block; margin-bottom: 0.5rem; color: var(--dark); font-weight: 700; font-size: 0.85rem; }
+input { width: 100%; padding: 12px 16px; border: 2px solid #edf2f7; border-radius: 12px; transition: var(--transition); }
+input:focus { border-color: var(--gold); outline: none; }
+
+.btn-main {
+    width: 100%; padding: 14px;
+    background: var(--dark);
+    color: var(--gold);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    font-weight: 800; cursor: pointer;
+    text-transform: uppercase;
+    transition: var(--transition);
+}
+
+/* =========================================
+   FOOTER Y RESPONSIVO
+   ========================================= */
+.footer-simple { padding: 50px 20px; text-align: center; background: #000814; color: rgba(255,255,255,0.4); border-top: 1px solid rgba(212, 175, 55, 0.1); }
+
+@media (max-width: 992px) {
+    .main-header { height: auto; padding: 25px 0; }
+    .main-header::before { display: none; } /* Quitamos la franja en móvil para limpiar */
+    .main-header .container { flex-direction: column; gap: 40px; }
+    .logo-container-central { position: relative; left: 0; top: 0; transform: none; }
+    .nav-logo-large { height: 90px; }
+    .hero-landing { padding-top: 150px; }
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro | Pro-Ciegos A.C.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="css/loginRegistro.css">
+</head>
+<body>
+    <div class="auth-card">
+        <div class="logo-img-container">
+            <img src="img/logo.png" alt="Logo Pro-Ciegos" class="auth-logo">
+        </div>
+        <h2>Crear Cuenta</h2>
+        <p>Regístrate para comenzar tu entrenamiento.</p>
+        
+        <form id="registerForm">
+            <div class="field">
+                <label>Nombre de Usuario</label>
+                <div class="input-group">
+                    <i class="fas fa-user-plus"></i>
+                    <input type="text" id="regUser" placeholder="Ej. alexis_razo" required>
+                </div>
+            </div>
+            <div class="field">
+                <label>Contraseña</label>
+                <div class="input-group">
+                    <i class="fas fa-key"></i>
+                    <input type="password" id="regPass" placeholder="Contraseña segura" required>
+                </div>
+            </div>
+            <div class="field">
+                <label>Confirmar Contraseña</label>
+                <div class="input-group">
+                    <i class="fas fa-check-double"></i>
+                    <input type="password" id="confirmPass" placeholder="Repite tu contraseña" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-main">REGISTRARSE AHORA</button>
+        </form>
+
+        <div class="link-swap">
+            ¿Ya tienes una cuenta? <a href="login.html">Inicia sesión aquí</a>
+        </div>
+    </div>
+
+    <script>
+        const registerForm = document.getElementById('registerForm');
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('regUser').value;
+            const password = document.getElementById('regPass').value;
+            const confirmPass = document.getElementById('confirmPass').value;
+
+            if (password !== confirmPass) {
+                Swal.fire({ icon: 'warning', title: 'Error', text: 'Las contraseñas no coinciden.' });
+                return;
+            }
+
+            Swal.fire({ title: 'Creando cuenta...', didOpen: () => Swal.showLoading() });
+
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    Swal.fire({ icon: 'success', title: '¡Éxito!', text: 'Registro completado.', timer: 2000, showConfirmButton: false })
+                    .then(() => { window.location.href = 'login.html'; });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Error', text: data.message });
+                }
+            } catch (error) {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Error de servidor.' });
+            }
+        });
+    </script>
+</body>
+</html>

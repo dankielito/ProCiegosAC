@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Pro-Ciegos AC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="css/loginRegistro.css">
+</head>
+<body>
+    <div class="auth-card">
+        <div class="logo-img-container">
+            <!-- Sustituye img/logo.png por la ruta real de tu imagen -->
+            <img src="img/logo.png" alt="Logo Pro-Ciegos" class="auth-logo">
+        </div>
+        <h2>Bienvenido</h2>
+        <p>Inicia sesión en tu panel académico</p>
+        
+        <form id="lForm">
+            <div class="field">
+                <label>Usuario</label>
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="u" placeholder="Tu usuario" required>
+                </div>
+            </div>
+            <div class="field">
+                <label>Contraseña</label>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="p" placeholder="••••••••" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-main">ENTRAR AL SISTEMA</button>
+        </form>
+        <div class="link-swap">¿Nuevo aquí? <a href="registro.html">Crea una cuenta</a></div>
+    </div>
+
+    <script>
+        document.getElementById('lForm').onsubmit = async (e) => {
+            e.preventDefault();
+            Swal.fire({ title: 'Verificando...', didOpen: () => Swal.showLoading() });
+
+            try {
+                const res = await fetch('/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username: u.value, password: p.value})
+                });
+                const data = await res.json();
+                
+                if(data.success) {
+                    window.location.href = 'dashboard.html';
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Acceso Denegado', text: 'Credenciales inválidas', confirmButtonColor: '#001F3F' });
+                }
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Conexión fallida' });
+            }
+        };
+    </script>
+</body>
+</html>

@@ -7,27 +7,110 @@ const wav = require('wav');
 const { translate } = require('google-translate-api-x');
 const multer = require('multer');
 const levenshtein = require('fast-levenshtein');
+const sqlite3 = require('sqlite3');
+const { open } = require('sqlite');
+const bcrypt = require('bcrypt');
+const session = require('express-session');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Configuración de almacenamiento para audios
 const upload = multer({ dest: 'Sonidos/' });
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public')); // Aquí es donde lee tus .html
+app.use(session({
+    secret: 'pro-ciegos-aesthetic-key-2026',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } 
+}));
 
-// Carga del modelo Vosk
+// --- CONFIGURACIÓN DE BASE DE DATOS (SQLite) ---
+let db;
+(async () => {
+    db = await open({
+        filename: './usuarios.db', // Se crea automáticamente en la raíz
+        driver: sqlite3.Database
+    });
+
+    await db.exec(`
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE,
+            password TEXT
+        )
+    `);
+
+    // Usuario inicial (User: admin / Pass: 1234)
+    const user = await db.get('SELECT * FROM users WHERE username = ?', ['admin']);
+    if (!user) {
+        const hash = await bcrypt.hash('1234', 10);
+        await db.run('INSERT INTO users (username, password) VALUES (?, ?)', ['admin', hash]);
+        console.log("👤 Usuario 'admin' creado por defecto.");
+    }
+})();
+
+// --- CONFIGURACIÓN DE VOSK ---
 const modelPath = path.join(__dirname, 'model');
+let model;
 if (!fs.existsSync(modelPath)) {
-    console.error("❌ Error: No se encuentra la carpeta 'model' en la raíz.");
-    process.exit(1);
+    console.error("❌ Error: No se encuentra la carpeta 'model'.");
+} else {
+    model = new Model(modelPath);
+    console.log("✅ Modelo Vosk cargado correctamente.");
 }
 
-const model = new Model(modelPath);
-console.log("✅ Servidor Pro-Ciegos A.C. iniciado correctamente.");
+// --- RUTAS DE AUTENTICACIÓN ---
 
-app.post('/evaluate-audio', upload.single('audio'), async (req, res) => {
+// Registro de nuevos usuarios
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const hash = await bcrypt.hash(password, 10);
+        await db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hash]);
+        res.json({ success: true });
+    } catch (error) {
+        res.status(400).json({ success: false, message: 'El usuario ya existe o hubo un error.' });
+    }
+});
+
+// Inicio de sesión
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = await db.get('SELECT * FROM users WHERE username = ?', [username]);
+        if (user && await bcrypt.compare(password, user.password)) {
+            req.session.userId = user.id;
+            req.session.username = user.username;
+            res.json({ success: true });
+        } else {
+            res.status(401).json({ success: false, message: 'Credenciales incorrectas' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error en el servidor' });
+    }
+});
+
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/login.html');
+});
+
+// Middleware para proteger rutas
+const authRequired = (req, res, next) => {
+    if (!req.session.userId) return res.status(401).json({ error: "No autorizado. Inicia sesión." });
+    next();
+};
+
+// --- RUTAS DE LA APLICACIÓN (PRO-CIEGOS A.C.) ---
+
+app.post('/evaluate-audio', authRequired, upload.single('audio'), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "No se recibió audio" });
 
     const targetText = (req.body.targetText || "").toLowerCase().trim();
@@ -39,12 +122,14 @@ app.post('/evaluate-audio', upload.single('audio'), async (req, res) => {
 
         wfReader.on('format', (format) => {
             const rec = new Recognizer({ model: model, sampleRate: format.sampleRate });
+            
             wfReader.on('data', (data) => rec.acceptWaveform(data));
+            
             wfReader.on('end', async () => {
                 const result = rec.finalResult();
                 const spokenText = result.text.toLowerCase().trim();
 
-                // Lógica de Precisión Estricta
+                // Lógica de Precisión
                 let score = 0;
                 if (spokenText === targetText && targetText !== "") {
                     score = 100;
@@ -54,7 +139,7 @@ app.post('/evaluate-audio', upload.single('audio'), async (req, res) => {
                     score = Math.round(((longestLength - distance) / longestLength) * 100);
                 }
 
-                // Traducción al español
+                // Traducción automática
                 let translation = "Sin transcripción";
                 if (spokenText) {
                     try {
@@ -68,7 +153,8 @@ app.post('/evaluate-audio', upload.single('audio'), async (req, res) => {
                 res.json({ 
                     spoken: spokenText || "No se detectó voz", 
                     accuracy: score,
-                    espanol: translation 
+                    espanol: translation,
+                    user: req.session.username 
                 });
 
                 rec.free();
@@ -77,10 +163,19 @@ app.post('/evaluate-audio', upload.single('audio'), async (req, res) => {
         });
         wfReadable.pipe(wfReader);
     } catch (error) {
-        console.error("Error procesando audio:", error);
         if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-        res.status(500).json({ error: "Error interno del servidor" });
+        res.status(500).json({ error: "Error procesando audio" });
     }
 });
 
-app.listen(PORT, () => console.log(`🚀 Accede a: http://localhost:${PORT}`));
+// Iniciar Servidor
+app.listen(PORT, () => {
+    console.log(`
+    --------------------------------------------------
+    🚀 Servidor Pro-Ciegos A.C. en puerto ${PORT}
+    🎨 Estética: Azul Oscuro y Dorado
+    📂 DB SQLite: Activa (usuarios.db)
+    🔗 URL: http://localhost:${PORT}/login.html
+    --------------------------------------------------
+    `);
+});

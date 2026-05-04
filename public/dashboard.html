@@ -3,131 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Pro-Ciegos A.C.</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
+    <title>Pro-Ciegos | English Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
 
-    <!-- SIDEBAR FIJA -->
-    <aside class="sidebar">
-        <div class="sidebar-logo">
-            <img src="img/logo.png" alt="Logo">
-            <h2>PRO-CIEGOS</h2>
+    <!-- SIDEBAR ESTILO UI DESIGN -->
+    <aside class="modern-sidebar">
+        <div class="sidebar-top">
+            <div class="user-profile-section">
+                <div class="avatar-wrapper">
+                    <img src="img/user-avatar.png" alt="Perfil" onerror="this.src='https://ui-avatars.com/api/?name=Alexis+Romero&background=003366&color=fff'">
+                </div>
+                <div class="user-info">
+                    <span class="user-name">Alexis Romero</span>
+                    <span class="user-role">Estudiante</span>
+                </div>
+            </div>
         </div>
-        <nav class="sidebar-nav">
-            <a href="#" class="nav-item active"><i class="fas fa-home"></i> Aprender</a>
-            <a href="#" class="nav-item"><i class="fas fa-book"></i> Diccionario</a>
-            <a href="#" class="nav-item"><i class="fas fa-trophy"></i> Clasificación</a>
-            <a href="#" class="nav-item"><i class="fas fa-store"></i> Tienda</a>
-            <a href="#" class="nav-item"><i class="fas fa-user-circle"></i> Perfil</a>
+
+        <nav class="sidebar-links">
+            <a href="#" class="s-link active">
+                <div class="icon-shape"><i class="fas fa-graduation-cap"></i></div>
+                <span>Aprender</span>
+            </a>
+            <a href="#" class="s-link">
+                <div class="icon-shape"><i class="fas fa-book-open"></i></div>
+                <span>Diccionario</span>
+            </a>
+            <a href="#" class="s-link">
+                <div class="icon-shape"><i class="fas fa-trophy"></i></div>
+                <span>Ranking</span>
+            </a>
+            <a href="#" class="s-link">
+                <div class="icon-shape"><i class="fas fa-shopping-cart"></i></div>
+                <span>Tienda</span>
+            </a>
+            <a href="#" class="s-link">
+                <div class="icon-shape"><i class="fas fa-ticket-alt"></i></div>
+                <span>Canjear Tarjeta</span>
+            </a>
+            <a href="#" class="s-link">
+                <div class="icon-shape"><i class="fas fa-user-circle"></i></div>
+                <span>Perfil</span>
+            </a>
         </nav>
+
+        <div class="sidebar-bottom">
+            <a href="index.html" class="logout-card">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Salir</span>
+            </a>
+        </div>
     </aside>
 
-    <!-- CONTENEDOR PRINCIPAL DIVIDIDO -->
-    <div class="main-wrapper">
-        
-        <!-- HEADER DE ESTADÍSTICAS -->
-        <header class="top-bar">
-            <div class="stats-container">
-                <div class="stat-bubble xp"><i class="fas fa-fire"></i> <span id="xp-count">0</span></div>
-                <div class="stat-bubble gems"><i class="fas fa-gem"></i> <span id="gem-count">0</span></div>
-                <div class="stat-bubble streak"><i class="fas fa-bolt"></i> <span>5 días</span></div>
+    <!-- VIEWPORT PRINCIPAL -->
+    <div class="main-viewport">
+        <header class="top-nav">
+            <div class="header-left">
+                <div class="header-stat"><i class="fas fa-bolt"></i> 5 DÍAS</div>
+            </div>
+            
+            <div class="header-brand">PRO-CIEGOS</div>
+            
+            <div class="header-right">
+                <div class="header-stat"><i class="fas fa-gem"></i> 120</div>
+                <div class="header-stat xp"><i class="fas fa-star"></i> 450 XP</div>
             </div>
         </header>
 
-        <main class="split-content">
-            <!-- COLUMNA IZQUIERDA: MAPA DE NIVELES (20 niveles en total) -->
-            <section class="levels-column" id="levels-container">
-                <!-- Se genera dinámicamente con JS -->
-            </section>
+        <div class="split-screen">
+            <!-- MAPA DE NIVELES -->
+            <section class="map-area" id="map-canvas"></section>
 
-            <!-- COLUMNA DERECHA: GUÍA (Fija) -->
-            <section class="guide-column">
-                <div class="guide-content">
-                    <img src="img/mapache.png" alt="Mapache" class="raccoon-hero">
-                    <div class="speech-bubble-pro">
-                        <h3>¡Sigue adelante!</h3>
-                        <p>Has llegado muy lejos. Completa los niveles para dominar todos los biomas.</p>
-                        <div class="mini-progress">
-                            <span>Progreso Total</span>
-                            <div class="bar-bg"><div class="bar-fill" id="total-progress-bar"></div></div>
+            <!-- PANEL DE GUÍA -->
+            <section class="guide-area">
+                <div class="guide-wrapper">
+                    <img src="img/mapache.png" alt="Guía" class="guide-img">
+                    <div class="mission-card">
+                        <span class="tag">Misión de hoy</span>
+                        <p>Completa la unidad de <strong>Greetings (Saludos)</strong> para ganar tu primera medalla de oro.</p>
+                        <div class="p-bar-container">
+                            <div class="p-bar-fill" style="width: 45%;"></div>
                         </div>
+                        <span class="p-text">45% del objetivo alcanzado</span>
                     </div>
                 </div>
             </section>
-        </main>
+        </div>
     </div>
 
     <script>
-        // Simulación de progreso (Nivel actual en el que se encuentra el usuario)
-        let nivelProgreso = parseInt(localStorage.getItem('nivelProgreso')) || 1;
+        const nivelActual = 1;
 
-        function renderizarMapa() {
-            const container = document.getElementById('levels-container');
-            // Definición de los 4 biomas (5 niveles cada uno)
+        function initMap() {
+            const canvas = document.getElementById('map-canvas');
             const biomas = [
-                { id: 'beach', clase: 'bg-beach', inicio: 1, fin: 5 },
-                { id: 'jungle', clase: 'bg-jungle', inicio: 6, fin: 10 },
-                { id: 'lava', clase: 'bg-lava', inicio: 11, fin: 15 },
-                { id: 'snow', clase: 'bg-snow', inicio: 16, fin: 20 }
+                { title: 'Básico 1', img: 'fondoPlaya.png', range: [1, 5] },
+                { title: 'Intermedio', img: 'fondoJungla.png', range: [6, 10] },
+                { title: 'Avanzado', img: 'fondoLava.png', range: [11, 15] },
+                { title: 'Experto', img: 'fondoNieve.png', range: [16, 20] }
             ];
 
-            biomas.forEach((bioma, index) => {
-                const section = document.createElement('div');
-                section.className = `bioma-wrapper ${bioma.clase}`;
-                
-                for (let i = bioma.inicio; i <= bioma.fin; i++) {
-                    const btn = document.createElement('button');
-                    btn.className = 'level-btn';
+            biomas.forEach((bioma, bIdx) => {
+                const zone = document.createElement('div');
+                zone.className = 'map-zone';
+                zone.style.backgroundImage = `linear-gradient(rgba(10, 25, 47, 0.8), rgba(10, 25, 47, 0.8)), url('img/${bioma.img}')`;
+
+                for (let i = bioma.range[0]; i <= bioma.range[1]; i++) {
+                    const nodeWrapper = document.createElement('div');
+                    nodeWrapper.className = 'node-wrapper';
                     
-                    if (i < nivelProgreso) {
-                        btn.classList.add('completed');
-                        btn.innerHTML = '<i class="fas fa-check"></i>';
-                    } else if (i === nivelProgreso) {
-                        btn.classList.add('current');
-                        btn.innerHTML = '<i class="fas fa-star"></i>';
-                    } else {
-                        btn.classList.add('locked');
-                        btn.innerHTML = '<i class="fas fa-lock"></i>';
-                    }
+                    const btn = document.createElement('button');
+                    btn.className = `level-node ${i < nivelActual ? 'done' : i === nivelActual ? 'active' : 'locked'}`;
+                    btn.innerHTML = i < nivelActual ? '<i class="fas fa-check"></i>' : 
+                                    i === nivelActual ? '<i class="fas fa-play"></i>' : 
+                                    '<i class="fas fa-lock"></i>';
 
-                    btn.onclick = () => {
-                        if (i <= nivelProgreso) {
-                            window.location.href = `nivel.html?n=${i}`;
-                        } else {
-                            Swal.fire({ 
-                                title: 'Nivel bloqueado', 
-                                text: 'Completa los niveles anteriores para desbloquear este bioma.',
-                                icon: 'lock', 
-                                confirmButtonColor: '#D4AF37' 
-                            });
-                        }
-                    };
-                    section.appendChild(btn);
+                    btn.onclick = () => { if(i <= nivelActual) window.location.href=`nivel.html?n=${i}`; };
+                    
+                    nodeWrapper.appendChild(btn);
+                    zone.appendChild(nodeWrapper);
                 }
-                
-                container.appendChild(section);
-
-                // Agregar línea dorada entre biomas (excepto después del último)
-                if (index < biomas.length - 1) {
-                    const divider = document.createElement('div');
-                    divider.className = 'gold-separator';
-                    container.appendChild(divider);
+                canvas.appendChild(zone);
+                if(bIdx < biomas.length - 1) {
+                    const line = document.createElement('div');
+                    line.className = 'path-line';
+                    canvas.appendChild(line);
                 }
             });
-
-            // Actualizar barra de progreso visual (0 a 100%)
-            const percent = (nivelProgreso / 20) * 100;
-            document.getElementById('total-progress-bar').style.width = `${percent}%`;
         }
-
-        window.onload = renderizarMapa;
+        window.onload = initMap;
     </script>
 </body>
 </html>

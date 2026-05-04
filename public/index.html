@@ -24,33 +24,52 @@
     <link rel="stylesheet" href="css/stylePrecios.css">
 
     <style>
-        /* Estilos específicos para la disposición del Mapache y la Identidad */
+        /* Estilos específicos para la disposición del Mapache e Identidad */
         .identity-layout {
+            padding: 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 50px;
+            gap: 20px;
             text-align: left;
+            position: relative;
         }
 
-        .identity-text { flex: 1.2; }
+        .identity-text { 
+            flex: 1; 
+            z-index: 2;
+        }
 
+        /* Contenedor de la mascota con ajustes de posición */
         .mascot-container {
-            flex: 0.8;
+            flex: 1.2;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
+            position: relative;
+            margin-top: -60px;    /* Desplaza al mapache hacia ARRIBA */
+            margin-bottom: -100px; /* Mantiene el solapamiento con la sección oscura */
+            z-index: 10;
         }
 
+        /* Mapache con tamaño del 120% y desplazamiento lateral */
         .mascot-img {
-            max-width: 400px;
-            width: 100%;
+            max-width: 700px; 
+            width: 120%; /* Ajustado al 120% según tu solicitud */
             height: auto;
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             filter: drop-shadow(0 15px 30px rgba(0,0,0,0.3));
+            transform: translateX(-10%); /* Desplazamiento sutil a la izquierda */
+            display: block;
         }
 
         .mascot-img:hover {
-            transform: scale(1.1) rotate(3deg);
+            transform: translateX(-10%) scale(1.05) rotate(2deg);
+        }
+
+        /* Configuración de sección para permitir desbordamiento visual */
+        #nosotros {
+            overflow: visible;
+            padding-bottom: 0;
         }
 
         .snake-divider {
@@ -63,7 +82,7 @@
             pointer-events: none;
         }
 
-        /* Ajuste para que el Swiper no sea gigante en la nueva disposición */
+        /* Ajuste para el Swiper de integrantes */
         .mySwiper {
             width: 280px;
             height: 380px;
@@ -71,13 +90,20 @@
             margin-left: 0;
         }
 
-        @keyframes modalPop {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
         @media (max-width: 992px) {
             .identity-layout { flex-direction: column; text-align: center; }
+            .mascot-container { 
+                margin-top: 0;
+                margin-bottom: 0; 
+                justify-content: center;
+                flex: 1;
+            }
+            .mascot-img { 
+                width: 100%; 
+                max-width: 450px; 
+                transform: none; 
+            }
+            .mascot-img:hover { transform: scale(1.05); }
             .mySwiper { margin: 30px auto; }
         }
     </style>
@@ -116,7 +142,7 @@
         </div>
     </section>
 
-    <!-- Sección Identidad -->
+    <!-- Sección Identidad (Equipo de 8vo Semestre) -->
     <section id="nosotros" class="info-section">
         <div class="container identity-layout">
             <div class="identity-text" data-aos="fade-right">
@@ -142,16 +168,16 @@
                 </div>
             </div>
 
-            <div class="mascot-container" data-aos="fade-left">
+            <!-- Contenedor del Mapache Ajustado -->
+            <div class="mascot-container" data-aos="fade-up">
                 <img src="img/mapache.png" alt="Mascota UPIICSA" class="mascot-img">
             </div>
         </div>
     </section>
 
-    <!-- Sección Meta -->
-    <section id="meta" class="info-section bg-dark" style="position: relative; overflow: hidden;">
+    <!-- Sección Meta (Fondo Oscuro) -->
+    <section id="meta" class="info-section bg-dark" style="position: relative; overflow: hidden; margin-top: 0;">
         <div class="container" style="position: relative; z-index: 5;">
-            <!-- Color aplicado directamente con estilo inline -->
             <h2 style="color: #D4AF37 !important;" data-aos="fade-down">Objetivos del Proyecto</h2>
             <div class="meta-grid">
                 <div class="meta-item" data-aos="flip-left" data-aos-delay="100">
@@ -167,7 +193,7 @@
                 <div class="meta-item" data-aos="flip-left" data-aos-delay="500">
                     <i class="fa-solid fa-graduation-cap fa-3x gold-text"></i>
                     <h3>Impacto Social</h3>
-                    <p>Fomentar la educación bilingüe inclusiva en la comunidad de Pro-Ciegos A.C.</p>
+                    <p>Fomentar la educación bilingüe inclusiva en la comunidad de Pro-Ciegos A.C..</p>
                 </div>
             </div>
         </div>
@@ -179,7 +205,7 @@
         </svg>
     </section>
 
-    <!-- Sección Precios (Usa funciones de planes.js) -->
+    <!-- Sección Precios -->
     <section id="precios" class="pricing-section">
         <div class="pricing-header" data-aos="fade-up">
             <h2 class="gold-text">Planes de Acceso</h2>
@@ -187,7 +213,7 @@
         </div>
 
         <div class="pricing-grid">
-            <!-- Básico -->
+            <!-- Los planes se gestionan con planes.js -->
             <div class="price-card" data-tilt data-aos="fade-right">
                 <h3>Básico</h3>
                 <div class="price-tag">
@@ -203,7 +229,6 @@
                 <button onclick="abrirModalPlan('basico')" class="btn-price">Elegir Plan</button>
             </div>
 
-            <!-- Pro -->
             <div class="price-card featured" data-tilt data-aos="fade-up">
                 <div class="discount-badge">POPULAR</div>
                 <h3>Pro</h3>
@@ -220,7 +245,6 @@
                 <button onclick="abrirModalPlan('pro')" class="btn-price">Obtener Pro</button>
             </div>
 
-            <!-- Premium -->
             <div class="price-card" data-tilt data-aos="fade-left">
                 <div class="discount-badge">-60% OFF</div>
                 <h3>Premium</h3>
@@ -243,28 +267,23 @@
         <p>&copy; 2026 Pro-Ciegos A.C. | Desarrollado por el equipo de 8vo Semestre IPN-UPIICSA</p>
     </footer>
 
-    <!-- Scripts Externos -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <!-- Tu archivo externo de planes -->
     <script src="js/planes.js"></script>
 
     <script>
-        // Inicializar AOS
         AOS.init({ once: true, duration: 1000 });
 
-        // Inicializar Swiper
         new Swiper(".mySwiper", {
             effect: "cards",
             grabCursor: true,
             pagination: { el: ".swiper-pagination", clickable: true },
         });
 
-        // Inicializar Tilt
         VanillaTilt.init(document.querySelectorAll(".price-card"), {
             max: 15,
             speed: 400,
@@ -272,7 +291,6 @@
             "max-glare": 0.2,
         });
 
-        // Función Confetti (Celebración)
         function celebrate() {
             confetti({
                 particleCount: 150,

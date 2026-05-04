@@ -48,13 +48,14 @@
 
     <script>
         const registerForm = document.getElementById('registerForm');
-        registerForm.addEventListener('submit', async (e) => {
+        registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
             const username = document.getElementById('regUser').value;
             const password = document.getElementById('regPass').value;
             const confirmPass = document.getElementById('confirmPass').value;
 
+            // Validación de coincidencia
             if (password !== confirmPass) {
                 Swal.fire({ icon: 'warning', title: 'Error', text: 'Las contraseñas no coinciden.' });
                 return;
@@ -62,23 +63,31 @@
 
             Swal.fire({ title: 'Creando cuenta...', didOpen: () => Swal.showLoading() });
 
-            try {
-                const response = await fetch('/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-                const data = await response.json();
+            // LÓGICA LOCALSTORAGE
+            // Obtenemos usuarios existentes o creamos un arreglo vacío
+            const usuarios = JSON.parse(localStorage.getItem('usuarios_prociegos')) || [];
 
-                if (data.success) {
-                    Swal.fire({ icon: 'success', title: '¡Éxito!', text: 'Registro completado.', timer: 2000, showConfirmButton: false })
-                    .then(() => { window.location.href = 'login.html'; });
-                } else {
-                    Swal.fire({ icon: 'error', title: 'Error', text: data.message });
-                }
-            } catch (error) {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'Error de servidor.' });
+            // Revisar si el usuario ya existe
+            if (usuarios.find(u => u.username === username)) {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Este nombre de usuario ya está registrado.' });
+                return;
             }
+
+            // Agregar nuevo usuario
+            usuarios.push({ username, password });
+            localStorage.setItem('usuarios_prociegos', JSON.stringify(usuarios));
+
+            setTimeout(() => {
+                Swal.fire({ 
+                    icon: 'success', 
+                    title: '¡Éxito!', 
+                    text: 'Registro completado localmente.', 
+                    timer: 2000, 
+                    showConfirmButton: false 
+                }).then(() => { 
+                    window.location.href = 'login.html'; 
+                });
+            }, 1000);
         });
     </script>
 </body>

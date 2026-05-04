@@ -11,7 +11,6 @@
 <body>
     <div class="auth-card">
         <div class="logo-img-container">
-            <!-- Sustituye img/logo.png por la ruta real de tu imagen -->
             <img src="img/logo.png" alt="Logo Pro-Ciegos" class="auth-logo">
         </div>
         <h2>Bienvenido</h2>
@@ -38,26 +37,31 @@
     </div>
 
     <script>
-        document.getElementById('lForm').onsubmit = async (e) => {
+        document.getElementById('lForm').onsubmit = (e) => {
             e.preventDefault();
+            const userInput = document.getElementById('u').value;
+            const passInput = document.getElementById('p').value;
+
             Swal.fire({ title: 'Verificando...', didOpen: () => Swal.showLoading() });
 
-            try {
-                const res = await fetch('/login', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({username: u.value, password: p.value})
-                });
-                const data = await res.json();
-                
-                if(data.success) {
-                    window.location.href = 'dashboard.html';
+            const usuarios = JSON.parse(localStorage.getItem('usuarios_prociegos')) || [];
+            const usuarioEncontrado = usuarios.find(u => u.username === userInput && u.password === passInput);
+
+            setTimeout(() => {
+                if(usuarioEncontrado) {
+                    // Guardamos el nombre en sessionStorage para que dashboard.php pueda saludarlo
+                    sessionStorage.setItem('usuario_nombre', userInput);
+                    // REDIRECCIÓN A PHP
+                    window.location.href = 'dashboard.php';
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Acceso Denegado', text: 'Credenciales inválidas', confirmButtonColor: '#001F3F' });
+                    Swal.fire({ 
+                        icon: 'error', 
+                        title: 'Acceso Denegado', 
+                        text: 'Usuario o contraseña incorrectos', 
+                        confirmButtonColor: '#001F3F' 
+                    });
                 }
-            } catch (err) {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'Conexión fallida' });
-            }
+            }, 1000);
         };
     </script>
 </body>

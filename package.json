@@ -21,6 +21,7 @@
     "express-session": "^1.19.0",
     "fast-levenshtein": "^3.0.0",
     "google-translate-api-x": "^10.7.2",
+    "http-proxy-middleware": "^3.0.5",
     "multer": "^2.1.1",
     "mysql2": "^3.22.3",
     "openai": "^6.35.0",

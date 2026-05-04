@@ -1,0 +1,4 @@
+node_modules/
+Sonidos/*.wav
+.env
+vs_cache/

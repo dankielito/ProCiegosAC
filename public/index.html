@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro-Ciegos A.C. | Learn English</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #121212; color: white; padding: 50px; }
+        .btn { padding: 20px 40px; font-size: 24px; cursor: pointer; border-radius: 10px; border: none; margin: 10px; transition: 0.3s; }
+        #recordBtn { background-color: #ff4b2b; color: white; }
+        #stopBtn { background-color: #444; color: white; display: none; }
+        .btn:disabled { background-color: #222; color: #555; cursor: not-allowed; }
+        .result-box { margin-top: 30px; background: #1e1e1e; padding: 20px; border-radius: 15px; border: 1px solid #333; }
+        .ingles { color: #00d4ff; font-size: 28px; font-weight: bold; }
+        .espanol { color: #ccff00; font-size: 22px; }
+    </style>
+</head>
+<body>
+    <h1>Accesibilidad English App</h1>
+    <p>Presiona el botón y habla en inglés</p>
+    
+    <button id="recordBtn" class="btn">🎤 GRABAR</button>
+    <button id="stopBtn" class="btn">🛑 DETENER</button>
+
+    <div class="result-box">
+        <p>En Inglés:</p>
+        <div id="textIngles" class="ingles">Esperando audio...</div>
+        <hr>
+        <p>En Español:</p>
+        <div id="textEspanol" class="espanol">---</div>
+    </div>
+
+    <!-- Librería para convertir a WAV real en el cliente -->
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

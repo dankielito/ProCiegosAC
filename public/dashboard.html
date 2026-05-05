@@ -21,7 +21,6 @@
 
         <div class="user-brief">
             <div class="avatar-frame">
-                <!-- Cambiado para usar tu imagen perfil.png -->
                 <img id="user-avatar" src="img/perfil.png" alt="Perfil">
             </div>
             <div class="user-info-text">
@@ -76,8 +75,8 @@
             <div class="header-brand">PRO-CIEGOS</div>
             
             <div class="header-right">
-                <div class="header-stat"><i class="fas fa-gem"></i> 120</div>
-                <div class="header-stat xp"><i class="fas fa-star"></i> 450 XP</div>
+                <div class="header-stat"><i class="fas fa-gem"></i> <span id="display-gemas">0</span></div>
+                <div class="header-stat xp"><i class="fas fa-star"></i> <span id="display-xp">0</span> XP</div>
             </div>
         </header>
 
@@ -90,12 +89,12 @@
                 <div class="guide-wrapper">
                     <img src="img/mapache.png" alt="Guía" class="guide-img">
                     <div class="mission-card">
-                        <span class="tag">Misión de hoy</span>
-                        <p>Completa la unidad de <strong>Greetings (Saludos)</strong> para ganar tu primera medalla de oro.</p>
+                        <span class="tag">Progreso del Bioma</span>
+                        <p id="mission-text">Completa los desafíos para avanzar al siguiente bioma.</p>
                         <div class="p-bar-container">
-                            <div class="p-bar-fill" style="width: 45%;"></div>
+                            <div id="main-progress-bar" class="p-bar-fill" style="width: 0%;"></div>
                         </div>
-                        <span class="p-text">45% del objetivo alcanzado</span>
+                        <span class="p-text" id="progress-percentage">0% del bioma completado</span>
                     </div>
                 </div>
             </section>
@@ -103,7 +102,8 @@
     </div>
 
     <script>
-        const nivelActual = 1;
+        // Esta variable se actualizará con los datos de la DB
+        let nivelUsuario = 1; 
 
         async function checkSession() {
             try {
@@ -111,18 +111,23 @@
                 const data = await response.json();
 
                 if (data.loggedIn) {
-                    // Actualizamos el nombre desde la DB
+                    // Actualizamos interfaz con datos reales de la DB
                     document.getElementById('display-username').textContent = data.username;
+                    document.getElementById('display-xp').textContent = data.xp || 0;
+                    document.getElementById('display-gemas').textContent = data.gemas || 0;
                     
-                    // Aseguramos que use perfil.png. 
-                    // Nota: Si la imagen no carga, puedes poner un "onerror" para el avatar de letras.
+                    nivelUsuario = data.progreso_bioma || 1;
+
+                    // Manejo de Avatar
                     const avatarImg = document.getElementById('user-avatar');
                     avatarImg.src = "img/perfil.png"; 
-                    
                     avatarImg.onerror = function() {
-                        // Fallback por si perfil.png no existe en la carpeta img/
                         this.src = `https://ui-avatars.com/api/?name=${data.username}&background=D4AF37&color=003366&bold=true`;
                     };
+
+                    // Renderizar el mapa después de obtener el nivel
+                    initMap();
+                    actualizarBarraMision();
 
                 } else {
                     window.location.href = 'login.html';
@@ -133,39 +138,59 @@
             }
         }
 
+        function actualizarBarraMision() {
+            // Calcula progreso basado en el primer bioma (niveles 1-5)
+            const porcentaje = Math.min(((nivelUsuario - 1) / 5) * 100, 100);
+            document.getElementById('main-progress-bar').style.width = porcentaje + "%";
+            document.getElementById('progress-percentage').textContent = Math.round(porcentaje) + "% del bioma completado";
+        }
+
         function initMap() {
             const canvas = document.getElementById('map-canvas');
+            canvas.innerHTML = ''; // Limpiar mapa antes de renderizar
+
             const biomas = [
-                { title: 'Básico 1', img: 'fondoPlaya.png', range: [1, 5] },
-                { title: 'Intermedio', img: 'fondoJungla.png', range: [6, 10] },
-                { title: 'Avanzado', img: 'fondoLava.png', range: [11, 15] },
-                { title: 'Experto', img: 'fondoNieve.png', range: [16, 20] }
+                { title: 'Playa', img: 'fondoPlaya.png', range: [1, 5], folder: 'Playa', file: 'nivelesPlaya' },
+                { title: 'Jungla', img: 'fondoJungla.png', range: [6, 10], folder: 'Jungla', file: 'nivelesJungla' },
+                { title: 'Volcán', img: 'fondoLava.png', range: [11, 15], folder: 'Volcan', file: 'nivelesVolcan' },
+                { title: 'Nieve', img: 'fondoNieve.png', range: [16, 20], folder: 'Nieve', file: 'nivelesNieve' }
             ];
 
             biomas.forEach((bioma, bIdx) => {
                 const zone = document.createElement('div');
                 zone.className = 'map-zone';
-                zone.style.backgroundImage = `linear-gradient(rgba(10, 25, 47, 0.85), rgba(10, 25, 47, 0.85)), url('img/${bioma.img}')`;
+                zone.style.backgroundImage = `linear-gradient(rgba(10, 25, 47, 0.8), rgba(10, 25, 47, 0.8)), url('img/${bioma.img}')`;
+
+                // Añadir título del bioma
+                const zoneTitle = document.createElement('h3');
+                zoneTitle.innerText = bioma.title;
+                zoneTitle.style.color = "#D4AF37";
+                zoneTitle.style.textAlign = "center";
+                zoneTitle.style.marginBottom = "20px";
+                zone.appendChild(zoneTitle);
 
                 for (let i = bioma.range[0]; i <= bioma.range[1]; i++) {
                     const nodeWrapper = document.createElement('div');
                     nodeWrapper.className = 'node-wrapper';
                     
                     const btn = document.createElement('button');
-                    btn.className = `level-node ${i < nivelActual ? 'done' : i === nivelActual ? 'active' : 'locked'}`;
+                    // done: nivel pasado | active: nivel actual | locked: nivel futuro
+                    const status = i < nivelUsuario ? 'done' : i === nivelUsuario ? 'active' : 'locked';
+                    btn.className = `level-node ${status}`;
                     
-                    btn.innerHTML = i < nivelActual ? '<i class="fas fa-check"></i>' : 
-                                    i === nivelActual ? '<i class="fas fa-play"></i>' : 
+                    btn.innerHTML = i < nivelUsuario ? '<i class="fas fa-check"></i>' : 
+                                    i === nivelUsuario ? '<i class="fas fa-play"></i>' : 
                                     '<i class="fas fa-lock"></i>';
 
                     btn.onclick = () => { 
-                        if(i <= nivelActual) {
-                            window.location.href=`nivel.html?n=${i}`; 
+                        if(i <= nivelUsuario) {
+                            // REDIRECCIÓN DINÁMICA A LA CARPETA CORRESPONDIENTE
+                            window.location.href=`niveles/${bioma.folder}/${bioma.file}.html?n=${i}`; 
                         } else {
                             Swal.fire({
                                 icon: 'lock',
-                                title: 'Acceso Restringido',
-                                text: 'Debes completar las lecciones anteriores.',
+                                title: 'Nivel Bloqueado',
+                                text: 'Completa los niveles anteriores para desbloquear este bioma.',
                                 confirmButtonColor: '#D4AF37',
                                 background: '#0a192f',
                                 color: '#fff'
@@ -188,7 +213,6 @@
 
         window.onload = () => {
             checkSession();
-            initMap();
         };
     </script>
 </body>

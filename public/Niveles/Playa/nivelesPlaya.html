@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro-Ciegos A.C. | Plataforma de Aprendizaje</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a192f;
+            --sidebar-bg: #112240;
+            --gold: #d4af37;
+            --gold-light: #f9e27d;
+            --success-green: #58cc02;
+            --text-main: #e6f1ff;
+            --text-dim: #8892b0;
+            --gold-gradient: linear-gradient(145deg, #d4af37, #f9e27d, #b8860b);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NAVBAR SUPERIOR */
+        nav {
+            height: 80px;
+            background: var(--sidebar-bg);
+            border-bottom: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            padding: 0 50px;
+            justify-content: space-between;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 15px; font-weight: 800; color: var(--gold); font-size: 1.2rem; }
+        .user-stats { display: flex; align-items: center; gap: 35px; font-weight: 700; }
+        .stat { display: flex; align-items: center; gap: 8px; }
+        
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            background: var(--gold);
+            object-fit: cover;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        /* LAYOUT PRINCIPAL (SPLIT) */
+        main {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 80px);
+        }
+
+        /* LADO IZQUIERDO: PERSONAJE (MÁS GRANDE) */
+        .character-section {
+            flex: 1.2; /* Aumentamos el espacio para el mapache */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+            position: relative;
+        }
+
+        .mapache-hero {
+            width: 95%; /* Mapache mucho más grande */
+            max-width: 650px;
+            filter: drop-shadow(0 25px 50px rgba(0,0,0,0.7));
+            animation: float 4s ease-in-out infinite;
+            z-index: 5;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.02); }
+        }
+
+        .speech-bubble {
+            background: white;
+            color: var(--bg-dark);
+            padding: 25px 40px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: -20px;
+            position: relative;
+            box-shadow: 0 12px 0 #cbd5e0;
+            z-index: 10;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 20px solid white;
+        }
+
+        /* LADO DERECHO: CONSOLA */
+        .console-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .practice-card {
+            background: var(--sidebar-bg);
+            width: 100%;
+            max-width: 580px;
+            border-radius: 45px;
+            border: 4px solid var(--gold);
+            padding: 60px 45px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            position: relative;
+            text-align: center;
+        }
+
+        .level-indicator {
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .target-word {
+            font-size: 7rem;
+            font-weight: 900;
+            margin: 0;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 0.9;
+        }
+
+        /* BARRA DE VOLUMEN */
+        .volume-container {
+            margin: 45px 0;
+            text-align: left;
+        }
+
+        .volume-label { font-size: 0.85rem; color: var(--gold-light); margin-bottom: 12px; font-weight: 700; opacity: 0.8; }
+        .volume-bar-bg {
+            height: 16px;
+            background: #1d2d50;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            gap: 5px;
+            padding: 3px;
+        }
+
+        .volume-chunk { flex: 1; height: 100%; background: #233554; border-radius: 4px; }
+        .chunk-active { background: var(--gold-light); box-shadow: 0 0 12px var(--gold); }
+
+        .btn-main {
+            width: 110px;
+            height: 110px;
+            border-radius: 35px;
+            border: none;
+            background: white;
+            border-bottom: 10px solid #cbd5e0;
+            cursor: pointer;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.1s;
+        }
+
+        .btn-main:active { transform: translateY(8px); border-bottom: 0; }
+
+        /* RESULTADOS */
+        .perfect-feedback {
+            background: rgba(88, 204, 2, 0.12);
+            border: 3px solid var(--success-green);
+            border-radius: 30px;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-info h3 { margin: 0; color: white; font-size: 1.8rem; }
+        .result-info p { margin: 5px 0 0 0; color: var(--success-green); font-weight: 800; font-size: 1.3rem; }
+        
+        .translation-tag {
+            background: var(--gold-gradient);
+            color: var(--bg-dark);
+            padding: 8px 20px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .footer-brand {
+            position: absolute;
+            bottom: 25px;
+            width: 100%;
+            left: 0;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-area">
+            <img src="../../img/logo_ipn.png" height="50" alt="">
+            PRO-CIEGOS A.C. | LEARNING SYSTEM
+        </div>
+        <div class="user-stats">
+            <div class="stat"><span style="color: #ff4b2b; font-size: 1.4rem;">❤</span> 5</div>
+            <div class="stat"><span style="color: #ffcc00; font-size: 1.4rem;">🔥</span> 12 DÍAS</div>
+            <div class="stat"><span style="color: #4facfe; font-size: 1.4rem;">💎</span> 1,250</div>
+            <!-- IMAGEN DE PERFIL ACTUALIZADA -->
+            <img src="../../img/perfil.png" class="profile-pic" alt="Perfil">
+        </div>
+    </nav>
+
+    <main>
+        <!-- SECCIÓN IZQUIERDA: EL MAPACHE GIGANTE -->
+        <section class="character-section">
+            <img src="../../img/mapachePregunta.png" class="mapache-hero" alt="Mapache Dankiel">
+            <div class="speech-bubble">
+                ¡Dominas el inglés, Alexis! 🎓✨
+            </div>
+        </section>
+
+        <!-- SECCIÓN DERECHA: LA CONSOLA -->
+        <section class="console-section">
+            <div class="practice-card">
+                <div class="level-indicator">BIOMA: PLAYA • SESIÓN OCTAVO SEMESTRE</div>
+                <h1 class="target-word">SUN</h1>
+
+                <div class="volume-container">
+                    <div class="volume-label">AUDIOMETRÍA EN TIEMPO REAL: CANAL_01</div>
+                    <div class="volume-bar-bg">
+                        <div class="volume-chunk chunk-active"></div>
+                        <div class="volume-chunk chunk-active"></div>
+                        <div class="volume-chunk chunk-active"></div>
+                        <div class="volume-chunk chunk-active"></div>
+                        <div class="volume-chunk chunk-active"></div>
+                        <div class="volume-chunk chunk-active"></div>
+                        <div class="volume-chunk chunk-active"></div>
+                        <div class="volume-chunk chunk-active"></div>
+                        <div class="volume-chunk"></div>
+                        <div class="volume-chunk"></div>
+                    </div>
+                </div>
+
+                <center>
+                    <button class="btn-main">
+                        <svg width="55" height="55" viewBox="0 0 24 24" fill="#112240">
+                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                        </svg>
+                    </button>
+                </center>
+
+                <div class="perfect-feedback">
+                    <div class="result-info">
+                        <h3>Dijiste: "Sun"</h3>
+                        <p>✓ 100% EXCELENTE</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="translation-tag">SOL</div>
+                        <div style="color: var(--success-green); font-size: 2.2rem; margin-top: 8px;">★ ★ ★</div>
+                    </div>
+                </div>
+
+                <div class="footer-brand">
+                    INSTITUTO POLITÉCNICO NACIONAL • UPIICSA • 2026
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
